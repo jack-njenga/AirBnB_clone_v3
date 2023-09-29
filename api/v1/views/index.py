@@ -18,7 +18,7 @@ def api_status():
 
 
 @app_views.route('/stats', methods=['GET'])
-def stats():
+def get_stats():
     '''endpoint that retrieves the number of each objects by type'''
     stats = {
             'amenities': storage.count('Amenity'),
