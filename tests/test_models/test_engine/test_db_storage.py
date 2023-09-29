@@ -66,3 +66,32 @@ test_db_storage.py'])
                              "{:s} method needs a docstring".format(func[0]))
             self.assertTrue(len(func[1].__doc__) >= 1,
                             "{:s} method needs a docstring".format(func[0]))
+
+    def test_db_storage_get(self):
+        """Test the get method in db storage"""
+        from models import storage
+        new_state = State(name="Nairobi")
+        storage.new(new_state)
+        storage.save()
+        state_id = list(storage.all(State).values())[0].id
+        state_obj = storage.get(State, state_id)
+        self.assertIsInstance(state_obj, State)
+        self.assertTrue(state_obj.id == state_id)
+
+    def test_db_storage_count(self):
+        """ Tests the count method in db storage """
+        from models import storage
+
+        all_objs = storage.count()
+        new_1 = State(name="new_1")
+        storage.new(new_1)
+        storage.save()
+        curr_obj = storage.count()
+        self.assertTrue((all_objs + 1) == curr_obj)
+
+        all_sts = storage.count(State)
+        new_2 = State(name="new_2")
+        storage.new(new_2)
+        storage.save()
+        curr_sts = storage.count(State)
+        self.assertTrue((all_sts + 1) == curr_sts)
