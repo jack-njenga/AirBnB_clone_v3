@@ -9,7 +9,7 @@ from api.v1.views import app_views
 from models import storage
 
 
-@app_views.route('/status', method=['GET'])
+@app_views.route('/status', methods=['GET'])
 def api_status():
     ''' returns a JSON'''
 
@@ -17,7 +17,7 @@ def api_status():
     return jsonify(response)
 
 
-@app_views.route('/stats', method=['GET'])
+@app_views.route('/stats', methods=['GET'])
 def get_stats():
     '''endpoint that retrieves the number of each objects by type'''
     stats = {
