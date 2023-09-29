@@ -103,7 +103,6 @@ class FileStorage:
             if cls in classes.values():
                 for key in self.__objects:
                     str_obj = str(str(cls).split('.')[-1]).split('\'')[0]
-                    print(f"{str_obj}, {key}")
                     if str_obj in key:
                         counts = counts + 1
         else:
