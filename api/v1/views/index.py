@@ -12,7 +12,7 @@ from models import storage
 
 @app_views.route('/status', methods=['GET'])
 def api_status():
-    ''' returns a JSON'''
+    '''returns a JSON'''
 
     response = {'status': 'OK'}
     return jsonify(response)
@@ -22,11 +22,11 @@ def api_status():
 def get_stats():
     '''endpoint that retrieves the number of each objects by type'''
     stats = {
-            'amenities': storage.count('Amenity'),
-            'cities': storage.count('City'),
-            'places': storage.count('Place'),
-            'reviews': storage.count('Review'),
-            'states': storage.count('State'),
-            'users': storage.count('User')
+            "amenities": storage.count('Amenity'),
+            "cities": storage.count('City'),
+            "places": storage.count('Place'),
+            "reviews": storage.count('Review'),
+            "states": storage.count('State'),
+            "users": storage.count('User')
      }
     return jsonify(stats)
