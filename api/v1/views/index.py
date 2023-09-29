@@ -3,6 +3,7 @@
 imports app_views from api.vi.views and creates a route
 "/status" on obj "app_views" that returns a JSON "status": "OK"
 """
+
 from flask import Flask
 from flask import jsonify
 from api.v1.views import app_views
