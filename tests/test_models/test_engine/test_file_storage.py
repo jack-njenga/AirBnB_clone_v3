@@ -113,3 +113,34 @@ class TestFileStorage(unittest.TestCase):
         with open("file.json", "r") as f:
             js = f.read()
         self.assertEqual(json.loads(string), json.loads(js))
+
+    def test_fs_get(self):
+        """ Test the get method in FSstorage"""
+        storage = FileStorage()
+
+        new_state = State()
+        storage.new(new_state)
+        storage.save()
+        st_id = list(storage.all(State).values())[0].id
+        st_obj = storage.get(State, st_id)
+        self.assertIsInstance(st_obj, State)
+        self.assertTrue(st_obj.id == st_id)
+
+    def test_fs_count(self):
+        """ Test the File storage count method """
+
+        storage = FileStorage()
+
+        all_ = storage.count()
+        new_1 = State()
+        storage.new(new_1)
+        storage.save()
+        curr_ = storage.count()
+        self.assertTrue((all_ + 1) == curr_)
+
+        all_pls = storage.count(Place)
+        new_2 = Place()
+        storage.new(new_2)
+        storage.save()
+        curr_pls = storage.count(Place)
+        self.assertTrue((all_pls + 1) == curr_pls)
