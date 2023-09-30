@@ -14,7 +14,7 @@ from models import storage
 from models.state import State
 
 
-@app_views.route("/states/", methods=["GET", "POST"], strict_slashes=False)
+@app_views.route("/states", methods=["GET", "POST"], strict_slashes=False)
 def get_all_post_states():
     """
     Retrieves the list of all State objects if (GET)
@@ -60,7 +60,6 @@ def del_state(state_id):
         if state is None:
             abort(404)
         else:
-            # storage.delete(state)
             for city in state.cities:
                 for place in city.places:
                     for review in place.reviews:

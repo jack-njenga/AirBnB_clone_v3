@@ -10,8 +10,6 @@ from api.v1.views import app_views
 import os
 
 app = Flask(__name__)
-
-'''register the app_views bluprint to app '''
 app.register_blueprint(app_views)
 
 
