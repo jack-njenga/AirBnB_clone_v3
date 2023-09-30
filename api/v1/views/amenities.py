@@ -17,8 +17,12 @@ from models.city import City
 from models.amenity import Amenity
 
 
+<<<<<<< HEAD
 @app_views.route("/amenities", methods=["GET", "POST"],
                  strict_slashes=False)
+=======
+@app_views.route("/amenities", methods=["GET", "POST"], strict_slashes=False)
+>>>>>>> parent of d414969... update on amenity endpoint_7
 def get_post_Amenity():
     """
     Retrieves the list of all Amenity objects if (GET)
