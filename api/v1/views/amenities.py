@@ -36,7 +36,7 @@ def get_post_Amenity():
     if request.method == "POST":
         data = request.get_json()
         if data:
-            if "name" not in data.keys():
+            if "name" not in data.keys(silent=True):
                 abort(400, "Missing name")
             else:
                 new_amt = Amenity(**data)
@@ -69,7 +69,7 @@ def get_del_put_amenity(amenity_id):
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at"]
         if amenity:
-            data = request.get_json()
+            data = request.get_json(force=True)
             if data:
                 for key, val in data.items():
                     if key not in check_list:
