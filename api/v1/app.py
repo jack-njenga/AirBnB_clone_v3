@@ -13,21 +13,20 @@ app = Flask(__name__)
 '''register the app_views bluprint to app '''
 app.register_blueprint(app_views)
 
-'''teardown function to close session '''
-
 
 @app.teardown_appcontext
 def teardown_session(exception):
+    """
+    Closes the session
+    """
     storage.close()
 
 
 if __name__ == "__main__":
-
     if os.getenv("HBNB_API_HOST"):
         host = os.getenv("HBNB_API_HOST")
     else:
         host = "0.0.0.0"
-
     if os.getenv("HBNB_API_PORT"):
         port = os.getenv("HBNB_API_PORT")
     else:
