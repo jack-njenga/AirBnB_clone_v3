@@ -17,7 +17,7 @@ from models.city import City
 from models.amenity import Amenity
 
 
-@app_views.route("/amenities", methods=["GET", "POST"], strict_slashes=False)
+@app_views.route("/amenities", methods=["GET", "POST"])
 def get_post_Amenity():
     """
     Retrieves the list of all Amenity objects if (GET)
@@ -62,7 +62,7 @@ def get_del_put_amenity(amenity_id):
         if amenity:
             storage.delete(amenity)
             storage.save()
-            return jsonify({}), 200
+            return jsonify({})
 
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at"]
@@ -73,6 +73,6 @@ def get_del_put_amenity(amenity_id):
                     if key not in check_list:
                         setattr(amenity, key, val)
                 amenity.save()
-                return jsonify(amenity.to_dict()), 200
+                return jsonify(amenity.to_dict())
             else:
                 abort(400, "Not a JSON")
