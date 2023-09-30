@@ -12,8 +12,6 @@ Handles all default RESTFul API actions:
 from api.v1.views import app_views
 from flask import jsonify, Flask, abort, request
 from models import storage
-from models.state import State
-from models.city import City
 from models.amenity import Amenity
 
 
@@ -33,9 +31,9 @@ def get_post_Amenity():
         return jsonify(amenity_lst)
 
     if request.method == "POST":
-        data = request.get_json()
+        data = request.get_json(silent=True)
         if data:
-            if "name" not in data.keys(silent=True):
+            if "name" not in data.keys():
                 abort(400, "Missing name")
             else:
                 new_amt = Amenity(**data)
@@ -45,7 +43,8 @@ def get_post_Amenity():
             abort(400, "Not a JSON")
 
 
-@app_views.route("/amenities/<amenity_id>", methods=["GET", "DELETE", "PUT"])
+@app_views.route("/amenities/<amenity_id>",
+                 methods=["GET", "DELETE", "PUT"], strict_slashes=False)
 def get_del_put_amenity(amenity_id):
     """
     Retrieves a Amenity object if (GET)
