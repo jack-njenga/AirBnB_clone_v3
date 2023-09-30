@@ -17,8 +17,7 @@ from models.city import City
 from models.amenity import Amenity
 
 
-@app_views.route("/amenities", methods=["GET", "POST"],
-                 strict_slashes=False)
+@app_views.route("/amenities", methods=["GET", "POST"])
 def get_post_Amenity():
     """
     Retrieves the list of all Amenity objects if (GET)
@@ -46,8 +45,7 @@ def get_post_Amenity():
             abort(400, "Not a JSON")
 
 
-@app_views.route("/amenities/<amenity_id>",
-                 methods=["GET", "DELETE", "PUT"], strict_slashes=False)
+@app_views.route("/amenities/<amenity_id>", methods=["GET", "DELETE", "PUT"])
 def get_del_put_amenity(amenity_id):
     """
     Retrieves a Amenity object if (GET)
