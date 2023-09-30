@@ -28,7 +28,7 @@ def get_all_post_states():
         return jsonify(st_lst)
 
     if request.method == "POST":
-        data = request.get_json()
+        data = request.get_json(silent=True)
         if data:
             if data.get("name") is None:
                 abort(400, "Missing name")
@@ -60,21 +60,28 @@ def del_state(state_id):
         if state is None:
             abort(404)
         else:
+            # storage.delete(state)
+            for city in state.cities:
+                for place in city.places:
+                    for review in place.reviews:
+                        storage.delete(review)
+                    storage.delete(place)
+                storage.delete(city)
             storage.delete(state)
             storage.save()
-            return jsonify({})
+            return jsonify({}), 200
 
     if request.method == "PUT":
         state = storage.get(State, str(state_id))
         if state is None:
             abort(404)
         else:
-            data = request.get_json()
+            data = request.get_json(silent=True)
             if data:
                 for key, val in data.items():
                     if key not in ["id", "created_at", "updated_at"]:
                         setattr(state, key, val)
                 state.save()
-                return jsonify(state.to_dict())
+                return jsonify(state.to_dict()), 200
             else:
                 abort(400, "Not a JSON")
