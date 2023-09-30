@@ -69,7 +69,7 @@ def get_del_put_amenity(amenity_id):
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at"]
         if amenity:
-            data = request.get_json(force=True)
+            data = request.get_json()
             if data:
                 for key, val in data.items():
                     if key not in check_list:
