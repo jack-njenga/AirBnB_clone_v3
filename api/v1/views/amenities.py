@@ -17,7 +17,7 @@ from models.city import City
 from models.amenity import Amenity
 
 
-@app_views.route("/amenities", methods=["GET", "POST"])
+@app_views.route("/amenities", methods=["GET", "POST"], strict_slashes=False)
 def get_post_Amenity():
     """
     Retrieves the list of all Amenity objects if (GET)
@@ -30,12 +30,12 @@ def get_post_Amenity():
         amenity_lst = []
         for amenity in amenities.values():
             amenity_lst.append(amenity.to_dict())
-        return jsonify(amenity_lst), 200
+        return jsonify(amenity_lst)
 
     if request.method == "POST":
-        data = request.get_json()
+        data = request.get_json(silent=True)
         if data:
-            if "name" not in data.keys(silent=True):
+            if "name" not in data.keys():
                 abort(400, "Missing name")
             else:
                 new_amt = Amenity(**data)
@@ -56,7 +56,7 @@ def get_del_put_amenity(amenity_id):
     if amenity is None:
         abort(404)
     if request.method == "GET":
-        return jsonify(amenity.to_dict()), 200
+        return jsonify(amenity.to_dict())
 
     if request.method == "DELETE":
         if amenity:
