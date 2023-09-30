@@ -85,9 +85,9 @@ class DBStorage:
         """
         cls_obj = None
         if cls:
-            if type(cls) == str:
+            if type(cls) is str:
                 try:
-                    cls = eval()
+                    cls = eval(cls)
                 except Exception as e:
                     pass
 
