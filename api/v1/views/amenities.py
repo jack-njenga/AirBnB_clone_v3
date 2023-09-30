@@ -62,7 +62,7 @@ def get_del_put_amenity(amenity_id):
         if amenity:
             storage.delete(amenity)
             storage.save()
-            return jsonify({})
+            return jsonify({}), 200
 
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at"]
@@ -73,6 +73,6 @@ def get_del_put_amenity(amenity_id):
                     if key not in check_list:
                         setattr(amenity, key, val)
                 amenity.save()
-                return jsonify(amenity.to_dict())
+                return jsonify(amenity.to_dict()), 200
             else:
                 abort(400, "Not a JSON")
