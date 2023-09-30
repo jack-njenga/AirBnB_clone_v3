@@ -31,10 +31,10 @@ def get_post_Amenity():
         amenity_lst = []
         for amenity in amenities.values():
             amenity_lst.append(amenity.to_dict())
-        return jsonify(amenity_lst)
+        return jsonify(amenity_lst), 200
 
     if request.method == "POST":
-        data = request.get_json(silent=True)
+        data = request.get_json()
         if data:
             if "name" not in data.keys():
                 abort(400, "Missing name")
@@ -54,11 +54,11 @@ def get_del_put_amenity(amenity_id):
     Deletes a Amenity object if (DELETE)
     Updates a Amenity object if (PUT)
     """
-    amenity = storage.get(Amenity, str(amenity_id))
+    amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
     if request.method == "GET":
-        return jsonify(amenity.to_dict())
+        return jsonify(amenity.to_dict()), 200
 
     if request.method == "DELETE":
         if amenity:
