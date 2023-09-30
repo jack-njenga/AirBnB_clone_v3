@@ -21,7 +21,7 @@ def get_all_post_states():
     Creates a State (POST)
     """
     if request.method == "GET":
-        all_states = storage.all("State")
+        all_states = storage.all(State)
         st_lst = []
         for state in all_states.values():
             st_lst.append(state.to_dict())
@@ -29,17 +29,13 @@ def get_all_post_states():
 
     if request.method == "POST":
         data = request.get_json()
-        if type(data) is dict:
+        if data:
             if data.get("name") is None:
                 abort(400, "Missing name")
             else:
                 new_state = State(**data)
-                storage.new(new_state)
-                storage.save()
-                curr_st = storage.get("State", str(new_state.id))
-                return jsonify(curr_st.to_dict()), 201
-        elif data is None:
-            abort(400, "Not a JSON")
+                new_state.save()
+                return jsonify(new_state.to_dict()), 201
         else:
             abort(400, "Not a JSON")
 
@@ -53,14 +49,14 @@ def del_state(state_id):
     Updates a State object if (PUT)
     """
     if request.method == "GET":
-        state = storage.get("State", str(state_id))
+        state = storage.get(State, str(state_id))
         if state is None:
             abort(404)
         else:
             return jsonify(state.to_dict())
 
     if request.method == "DELETE":
-        state = storage.get("State", str(state_id))
+        state = storage.get(State, str(state_id))
         if state is None:
             abort(404)
         else:
@@ -69,21 +65,16 @@ def del_state(state_id):
             return jsonify({})
 
     if request.method == "PUT":
-        state = storage.get("State", str(state_id))
+        state = storage.get(State, str(state_id))
         if state is None:
             abort(404)
         else:
             data = request.get_json()
-            if type(data) is dict:
-                kwargs = {}
+            if data:
                 for key, val in data.items():
                     if key not in ["id", "created_at", "updated_at"]:
-                        kwargs[key] = val
                         setattr(state, key, val)
                 state.save()
-                curr = storage.get("State", str(state_id))
-                return jsonify(curr.to_dict())
-            elif data is None:
-                abort(400, "Not a JSON")
+                return jsonify(state.to_dict())
             else:
                 abort(400, "Not a JSON")
