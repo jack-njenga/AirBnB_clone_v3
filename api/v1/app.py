@@ -5,11 +5,13 @@ script that create flask app and registers blueprint app views to Flask ins
 
 from flask import Flask
 from flask import jsonify
+from flask_cors import CORS
 from models import storage
 from api.v1.views import app_views
 import os
 
 app = Flask(__name__)
+cors = CORS(app, resources={"/*": {"origins": "0.0.0.0"}})
 app.register_blueprint(app_views)
 
 

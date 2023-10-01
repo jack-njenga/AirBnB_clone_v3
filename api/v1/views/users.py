@@ -34,14 +34,14 @@ def get_post_user():
         data = request.get_json(silent=True)
         if data:
             if "email" not in data.keys():
-                abort(400, "Missing email")
+                abort(400, description="Missing email")
             if "password" not in data.keys():
-                abort(400, "Missing password")
+                abort(400, description="Missing password")
             new_usr = User(**data)
             new_usr.save()
-            return make_response(jsonify(new_usr.to_dict()), 201)
+            return jsonify(new_usr.to_dict()), 201
         else:
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")
 
 
 @app_views.route("/users/<user_id>",
@@ -61,7 +61,7 @@ def get_del_put_user(user_id):
     if request.method == "DELETE":
         storage.delete(user)
         storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at", "email"]
@@ -71,6 +71,6 @@ def get_del_put_user(user_id):
                 if key not in check_list:
                     setattr(user, key, val)
             user.save()
-            return make_response(jsonify(user.to_dict()), 200)
+            return jsonify(user.to_dict()), 200
         else:
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")

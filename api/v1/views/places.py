@@ -35,23 +35,23 @@ def get_post_place(city_id):
     if request.method == "POST":
         data = request.get_json(silent=True)
         if data:
-            if "name" not in data.keys():
-                abort(400, "Missing name")
             if "user_id" not in data.keys():
-                abort(400, "Missing user_id")
+                abort(400, description="Missing user_id")
             curr_usr = storage.get(User, data["user_id"])
             if curr_usr:
+                if "name" not in data.keys():
+                    abort(400, description="Missing name")
                 data["city_id"] = city_id
                 new_plc = Place(**data)
                 new_plc.save()
-                return make_response(jsonify(new_plc.to_dict()), 201)
+                return jsonify(new_plc.to_dict()), 201
             else:
                 abort(404)
         else:
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")
 
 
-@app_views.route("/places/<place_id>>",
+@app_views.route("/places/<place_id>",
                  methods=["GET", "DELETE", "PUT"], strict_slashes=False)
 def get_del_put_place(place_id):
     """
@@ -67,11 +67,9 @@ def get_del_put_place(place_id):
 
     if request.method == "DELETE":
         if place.review:
-            for review in places.reviews:
-                storage.delete(review)
             storage.delete(place)
             storage.save()
-        return make_response(jsonify({}), 200)
+        return jsonify({}), 200
 
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at", "user_id", "city_id"]
@@ -81,6 +79,6 @@ def get_del_put_place(place_id):
                 if key not in check_list:
                     setattr(place, key, val)
             place.save()
-            return make_response(jsonify(place.to_dict()), 200)
+            return jsonify(place.to_dict()), 200
         else:
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")
