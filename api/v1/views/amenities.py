@@ -34,13 +34,13 @@ def get_post_Amenity():
         data = request.get_json(silent=True)
         if data:
             if "name" not in data.keys():
-                abort(400, "Missing name")
+                abort(400, description="Missing name")
             else:
                 new_amt = Amenity(**data)
                 new_amt.save()
                 return jsonify(new_amt.to_dict()), 201
         else:
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")
 
 
 @app_views.route("/amenities/<amenity_id>",
@@ -51,7 +51,7 @@ def get_del_put_amenity(amenity_id):
     Deletes a Amenity object if (DELETE)
     Updates a Amenity object if (PUT)
     """
-    amenity = storage.get(Amenity, amenity_id)
+    amenity = storage.get(Amenity, str(amenity_id))
     if amenity is None:
         abort(404)
     if request.method == "GET":
@@ -72,4 +72,4 @@ def get_del_put_amenity(amenity_id):
             amenity.save()
             return jsonify(amenity.to_dict()), 200
         else:
-            abort(400, "Not a JSON")
+            abort(400, description="Not a JSON")
