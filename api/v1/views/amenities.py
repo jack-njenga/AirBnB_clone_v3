@@ -51,27 +51,25 @@ def get_del_put_amenity(amenity_id):
     Deletes a Amenity object if (DELETE)
     Updates a Amenity object if (PUT)
     """
-    amenity = storage.get(Amenity, str(amenity_id))
+    amenity = storage.get(Amenity, amenity_id)
     if amenity is None:
         abort(404)
     if request.method == "GET":
         return jsonify(amenity.to_dict())
 
     if request.method == "DELETE":
-        if amenity:
-            storage.delete(amenity)
-            storage.save()
-            return jsonify({}), 200
+        storage.delete(amenity)
+        storage.save()
+        return jsonify({}), 200
 
     if request.method == "PUT":
         check_list = ["id", "created_at", "updated_at"]
-        if amenity:
-            data = request.get_json()
-            if data:
-                for key, val in data.items():
-                    if key not in check_list:
-                        setattr(amenity, key, val)
-                amenity.save()
-                return jsonify(amenity.to_dict()), 200
-            else:
-                abort(400, "Not a JSON")
+        data = request.get_json(silent=True)
+        if data:
+            for key, val in data.items():
+                if key not in check_list:
+                    setattr(amenity, key, val)
+            amenity.save()
+            return jsonify(amenity.to_dict()), 200
+        else:
+            abort(400, "Not a JSON")
