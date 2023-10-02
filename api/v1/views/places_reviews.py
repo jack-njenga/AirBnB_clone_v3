@@ -1,6 +1,13 @@
 #!/usr/bin/python3
 """
+Handles all default RESTFul API actions:
+    Retrieves the list of all review objects (GET /api/v1/places)
+    Retrieves a review object (GET /api/v1/states/<state_id>):
+    Deletes a review object (DELETE /api/v1/reviews/<review_id>)
+    Creates a review (POST /api/v1/places/<place_id>/reviews)
+    Updates a review object (PUT /api/v1/reviews/<review_id>)
 """
+
 
 from flask import Flask, jsonify, abort, request
 from models import storage
