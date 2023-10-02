@@ -82,3 +82,60 @@ def get_del_put_place(place_id):
             return jsonify(place.to_dict()), 200
         else:
             abort(400, description="Not a JSON")
+
+
+@app_views.route("/places_search", methods=["POST"], strict_slashes=False)
+def post_place():
+    """
+    Retrieves all Place objects depending of the
+    JSON in the body of the request.
+    """
+    places = storage.all(Place).values()
+    place_list = []
+
+    data = request.get_json(silent=True)
+    if data:
+        try:
+            states = data["states"]
+            cities = data["cities"]
+            amenities = data["amenities"]
+        except Exception as e:
+            states = []
+            cities = []
+            amenities = []
+
+        empty = False
+        if all(len(val) == 0 for val in data.values()):
+            empty = True
+        if not bool(data) or empty is True:
+            for place in places:
+                place_list.append(place.to_dict())
+                # return jsonify(place_list)
+
+        if len(states) > 0:
+            for state_id in states:
+                for place in places:
+                    city = storage.get(City, str(place.city_id))
+                    if state_id == city.state_id:
+                        if place.to_dict() not in place_list:
+                            place_list.append(place.to_dict())
+
+        if len(cities) > 0:
+            for city_id in cities:
+                for place in places:
+                    if city_id == place.city_id:
+                        if place.to_dict() not in place_list:
+                            place_list.append(place.to_dict())
+
+        if len(amenities) > 0:
+            place_list = []
+            for place in places:
+                all_amenities = place.amenities
+                for amenity in all_amenities:
+                    for amenity_id in amenities:
+                        if amenity_id == amenity.id:
+                            place_list.append(place.to_dict())
+
+        return jsonify(place_list)
+    else:
+        abort(400, description="Not a JSON")

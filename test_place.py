@@ -11,13 +11,10 @@ amenities = storage.all(Amenity)
 print(f"places: {len(places)}")
 print(f"amenities: {len(amenities)}")
 print("============================")
-for key, val in amenities.items():
-    print("=====================================")
-    print(f"----------{key}----------")
-    print(val.to_dict())
-
-place = storage.get(Place, sys.argv[1])
-if place:
-    print(place.to_dict())
-else:
-    print(f"place is {place}")
+for place in places.values():
+    for amenity in place.amenities:
+        if "017ec502-e84a-4a0f-92d6-d97e27bb6bdf" == amenity.id:
+            print("=====================================")
+            print(f"----------{type(amenity)}----------")
+            print(amenity)
+            print(amenity.to_dict())

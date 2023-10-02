@@ -4,11 +4,12 @@ Creates a new view for the link between Place objects and
 Amenity objects that handles all default RESTFul API actions
 """
 
-from flas import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
 from models.place import Place
-from models.amenities import Amenity
+from models.amenity import Amenity
+import os
 d_b = os.getenv("HBNB_TYPE_STORAGE")
 
 
@@ -45,7 +46,7 @@ def del_post_place_amenity(place_id, amenity_id):
         abort(404)
 
     if request.method == "DELETE":
-        if d_b = "db":
+        if d_b == "db":
             if amenity in place.amenities:
                 place.amenities.remove(amenity)
             else:
