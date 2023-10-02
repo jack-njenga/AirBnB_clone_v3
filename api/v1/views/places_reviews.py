@@ -39,7 +39,6 @@ def get_review(review_id):
     review_obj = storage.get(Review, review_id)
     if review_id is None:
         abort(404)
-    else:
         return jsonify(review_id.to_dict())
 
 
